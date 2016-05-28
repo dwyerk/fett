@@ -1,0 +1,16 @@
+---
+- name: Add deadsnakes ppa
+  apt_repository: repo='ppa:fkrull/deadsnakes'
+
+- name: Update package list
+  apt: update_cache=yes
+
+- name: Install python stuff
+  apt: name={{ item }} state=present
+  with_items:
+    - python3.5
+    - python3.5-dev
+    - build-essential
+    - virtualenvwrapper
+  tags:
+    - python

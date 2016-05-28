@@ -1,0 +1,7 @@
+# Get things going
+- name: apply common configuration to all nodes
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - development
