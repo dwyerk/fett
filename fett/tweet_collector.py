@@ -24,7 +24,7 @@ def limit_handled(cursor):
         except tweepy.RateLimitError:
             time.sleep(15 * 60)
 
-for i, tweet in enumerate(limit_handled(tweepy.Cursor(api.list_timeline, "IAmAru", "food-trucks").items())):
+for i, tweet in enumerate(limit_handled(tweepy.Cursor(api.list_timeline, "FettAPI", "trucks").items())):
     print("Getting tweet {}".format(i))
     TWEETS.append(tweet)
     if len(TWEETS) >= MAX_TWEETS:
