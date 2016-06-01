@@ -10,7 +10,7 @@ from typing import Dict, Any
 
 from fett.twitter_collector import TwitterCollector
 
-logging.basicConfig(level=logging.DEBUG, stream=sys.stderr)
+logging.basicConfig(stream=sys.stderr)
 
 logger = logging.getLogger("fett.daemon")
 
@@ -28,22 +28,19 @@ def extract(tweet: Dict[str, Any]) -> str:
     return tweet["id"]
 
 async def enrich() -> None:
+    """Basic enrichment tick"""
     while True:
         tweet = await TWEET_QUEUE.get()
-        logger.debug("Processing: %s", tweet["id"])
+        logger.info("[%s] -> Processing", tweet["id"])
         final = extract(tweet)
-        logger.debug("Done processing %s", final)
+        logger.debug("[%s] <- Processing done: %s", tweet["id"], final)
         await asyncio.sleep(1)
 
 async def collect(twitter_collector, interval) -> None:
-    """Collect the tweets
-    :returns: TODO
-
-    """
-    loop = asyncio.get_event_loop()
+    """Collect the tweets"""
     while True:
         for tweet in twitter_collector.collect():
-            logger.debug("Collecting: %s", tweet["id"])
+            logger.info("[%s] Collected", tweet["id"])
             TWEET_QUEUE.put_nowait(tweet)
         await asyncio.sleep(interval)
 
@@ -74,6 +71,7 @@ def main():
 
     """
     args = parse_args()
+    logging.getLogger("fett").setLevel(logging.DEBUG if args.verbose else logging.INFO)
     start_collection(args.interval)
 
 def parse_args():
@@ -81,8 +79,11 @@ def parse_args():
     :returns: TODO
 
     """
-    parser = argparse.ArgumentParser(description="The Fett daemon", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-i", "--interval", dest="interval", type=int, default=3, help="The interval (in minutes)")
+    parser = argparse.ArgumentParser(description="The Fett daemon",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-i", "--interval", dest="interval", type=int, default=3,
+                        help="The interval (in minutes)")
+    parser.add_argument("-v", dest="verbose", action="store_true")
     return parser.parse_args()
 
 if __name__ == "__main__":

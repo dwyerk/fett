@@ -1,12 +1,15 @@
 """Collects statuses from Twitter"""
 
 import json
+import logging
 import time
 from typing import Any, Dict, Iterable
 
 import tweepy
 
 from fett import secrets
+
+logger = logging.getLogger("fett.twitter")
 
 def limit_handled(cursor: tweepy.Cursor):
     """Wrap cursor access with rate limiting
@@ -39,6 +42,7 @@ class TwitterCollector:
         :returns: TODO
 
         """
+        logger.debug("Collecting tweets")
         data = json.load(open("tweets-5.json", "r"))
         yield from data
         # for page in limit_handled(tweepy.Cursor(self._api.list_timeline, self.account_name,
