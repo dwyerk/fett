@@ -14,3 +14,9 @@
     - virtualenvwrapper
   tags:
     - python
+
+- name: Install openjdk-r ppa
+  apt_repository: repo=ppa:openjdk-r/ppa
+
+- name: Install OpenJDK8
+  apt: pkg=openjdk-8-jdk state=installed

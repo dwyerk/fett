@@ -9,6 +9,9 @@ add2virtualenv .
 # Install requiremnts
 `pip install -r requirements.txt`
 
+# Download Spacy model
+`python -m spacy.en.download`
+
 # run the blaster api
 ```
 workon fett
