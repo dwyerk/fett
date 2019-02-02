@@ -1,6 +1,6 @@
 tweepy==3.5.0
 hug==2.1.2
 gunicorn==19.6.0
-marshmallow==2.7.3
+marshmallow>=2.15.1
 spacy==0.101.0
 ijson==2.3
